@@ -3,11 +3,11 @@ import { useParams } from "react-router";
 
 const BookDetail = () => {
   const { bookId } = useParams();
-  console.log(typeof bookId)
+  console.log(typeof bookId);
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const {bookId: currentBookId, image} = book;
+  const { bookId: currentBookId, image } = book;
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -37,8 +37,8 @@ const BookDetail = () => {
       <img className="w-36" src={image} />
       <br />
       <div className="flex gap-4">
-      <button className="btn btn-soft">Read</button>
-      <button className="btn btn-accent">Wish List</button>
+        <button className="btn btn-outline">Mark as Read</button>
+        <button className="btn btn-accent">Add to Wish List</button>
       </div>
     </div>
   );
