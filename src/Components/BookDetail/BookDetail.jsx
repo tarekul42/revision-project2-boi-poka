@@ -3,11 +3,10 @@ import { useParams } from "react-router";
 
 const BookDetail = () => {
   const { bookId } = useParams();
-  console.log(typeof bookId);
+  console.log("bookId:", bookId, typeof bookId); // Debugging log
+
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const { bookId: currentBookId, image } = book;
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -15,9 +14,10 @@ const BookDetail = () => {
         const res = await fetch("/booksData.json");
         const data = await res.json();
 
-        const foundBook = data.find((b) => b.bookId === Number(bookId));
+        // Ensure bookId matches correctly
+        const foundBook = data.find((b) => String(b.bookId) === String(bookId));
 
-        setBook(foundBook);
+        setBook(foundBook || null);
       } catch (error) {
         console.error("Error fetching book data:", error);
       } finally {
@@ -26,7 +26,7 @@ const BookDetail = () => {
     };
 
     fetchBook();
-  }, [bookId]); // 📌 Ensure it runs when bookId changes
+  }, [bookId]); // ✅ Re-run if bookId changes
 
   if (loading) return <p>Loading book details...</p>;
   if (!book) return <p>📚 Book not found!</p>;
@@ -34,7 +34,8 @@ const BookDetail = () => {
   return (
     <div className="my-12">
       <h2>{book.bookName}</h2>
-      <img className="w-36" src={image} />
+      <img className="w-36" src={book.image} alt={book.bookName} />{" "}
+      {/* Use book.image safely */}
       <br />
       <div className="flex gap-4">
         <button className="btn btn-outline">Mark as Read</button>
